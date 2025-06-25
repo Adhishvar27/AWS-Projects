@@ -1,9 +1,8 @@
 const express=require('express');
 const router=express.Router();
 
-router.post('/signup',(req,res)=>{
-    const { name, email, password } = req.body;
-    console.log(name, email, password);
-});
+const usercontroller=require('../controllers/usercontroller');
+
+router.post('/signup',usercontroller.addtousers);
 
 module.exports=router;
