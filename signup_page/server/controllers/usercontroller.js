@@ -4,12 +4,17 @@ const DataBase=require('../database/database');
 const addtousers=async(req,res)=>{
     try {
         const {name,email,password}=req.body;
-        const insertintouser=UserTable.create({
+        const existinguser=await UserTable.findOne({where:{email:email}});
+        if(existinguser){
+            return res.status(400).json({message:'User already exist'});
+        } 
+
+        const insertintouser=await UserTable.create({
             name:name,
             email:email,
             password:password
         });
-        res.status(201).json(insertintouser);
+        res.status(201).json({insertintouser,message:'User inserted successfully'});
     } catch (error) {
         res.status(500).json({error: error.message});
     }
