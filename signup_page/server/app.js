@@ -13,7 +13,7 @@ const userrouter=require('./routers/userRouter');
 app.use('/users',userrouter);
 
 app.use('/',(req,res)=>{
-    res.sendFile(path.join(__dirname,'..','public','frontpage.html'));
+    res.sendFile(path.join(__dirname,'..','public','MainPage.html'));
 })
 
 db.sync({alter:true}).then(()=>{
