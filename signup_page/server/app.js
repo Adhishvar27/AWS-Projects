@@ -2,7 +2,8 @@ const express=require('express');
 const path=require('path');
 const cors=require('cors');
 const app=express();
-
+const db=require('./database/database');
+require('./modules/userTable');
 app.use(express.json());
 
 app.use(cors());
@@ -15,6 +16,10 @@ app.use('/',(req,res)=>{
     res.sendFile(path.join(__dirname,'..','public','frontpage.html'));
 })
 
-app.listen(3000,()=>{
+db.sync({alter:true}).then(()=>{
+    app.listen(3000,()=>{
     console.log('Server is running');
+})
+}).catch((error)=>{
+    console.log(error);
 })
