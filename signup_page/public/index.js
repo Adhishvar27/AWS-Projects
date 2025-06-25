@@ -1,6 +1,18 @@
 
-document.getElementById('signUpForm').addEventListener('submit',onSubmitFunction);
-async function onSubmitFunction(event){
+
+document.addEventListener('DOMContentLoaded', () => {
+  const signUpForm = document.getElementById('signUpForm');
+  if (signUpForm) {
+    signUpForm.addEventListener('submit', onSignUpSubmitFunction);
+  }
+
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit', onLoginFuction);
+  }
+});
+//document.getElementById('signUpForm').addEventListener('submit',onSignUpSubmitFunction);
+async function onSignUpSubmitFunction(event){
         event.preventDefault();
 
         const form = event.target;
@@ -17,9 +29,50 @@ async function onSubmitFunction(event){
         },
         body:JSON.stringify(myObj)
     });
+    const data=await response.json();
+    
     if(!response.ok){
         console.log('error');
+        const errorText=document.createElement('div');
+        errorText.textContent=data.message;
+        errorText.style.color='red'
+        document.body.appendChild(errorText);
     }
+    } catch (error) {
+        console.error(error);
+    }
+    form.reset();
+}
+
+//document.getElementById('loginForm').addEventListener('submit',onLoginFuction);
+async function onLoginFuction(event) {
+    event.preventDefault();
+
+    const form=event.target;
+    const myObj={
+        email:form.email.value,
+        password:form.password.value
+    };
+    try {
+        const response=await fetch('http://localhost:3000/users/login',{
+            method:'POST',
+            headers:{
+                'content-type':'application/json'
+            },
+            body:JSON.stringify(myObj)
+        });
+        const data=await response.json();
+        console.log(data);
+        if(data.message==='Password is incorrect' || data.message==='User Not Found'){
+            const errorDiv=document.createElement('div');
+            errorDiv.textContent = data.message;
+            errorDiv.style.color = 'red';
+            document.body.appendChild(errorDiv);
+        }
+        else{
+            alert('User has been logged in successfully');
+        }
+        
     } catch (error) {
         console.error(error);
     }
