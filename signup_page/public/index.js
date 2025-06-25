@@ -23,4 +23,5 @@ async function onSubmitFunction(event){
     } catch (error) {
         console.error(error);
     }
+    form.reset();
 }
