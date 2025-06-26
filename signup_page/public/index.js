@@ -71,7 +71,9 @@ async function onLoginFuction(event) {
         }
         else{
             //alert('User has been logged in successfully');
+            localStorage.setItem('token',data.token);
             window.location.href='expense_page/expense.html';
+
         }
         
     } catch (error) {
