@@ -3,7 +3,8 @@ const path=require('path');
 const cors=require('cors');
 const app=express();
 const db=require('./database/database');
-require('./modules/userTable');
+require('dotenv').config();
+require('./modules');
 app.use(express.json());
 
 app.use(cors());
