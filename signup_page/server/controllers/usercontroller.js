@@ -1,5 +1,6 @@
 const UserTable=require('../modules/userTable');
 const DataBase=require('../database/database');
+const bcyrpt=require('bcrypt');
 
 const addtousers=async(req,res)=>{
     try {
@@ -8,13 +9,12 @@ const addtousers=async(req,res)=>{
         if(existinguser){
             return res.status(400).json({message:'User already exist'});
         } 
-
-        const insertintouser=await UserTable.create({
-            name:name,
-            email:email,
-            password:password
-        });
-        res.status(201).json({insertintouser,message:'User inserted successfully'});
+        const saltround=10;
+        bcyrpt.hash(password,saltround,async (err,hash)=>{
+            console.log(err);
+            await UserTable.create({ name , email , password: hash });
+        res.status(201).json({message:'User inserted successfully'});
+        })
     } catch (error) {
         res.status(500).json({error: error.message});
     }
@@ -25,14 +25,21 @@ const checklogin=async(req,res)=>{
         const{email,password}=req.body;
         const user=await UserTable.findOne({where:{email:email}});
         if(!user){
-            return res.status(404).json({message:'User Not Found'});
+            return res.status(404).json({message:'User Not Found',status:404});
         }
-        if(user.password!==password){
-            return res.status(400).json({message:'Password is incorrect'});
-        }
-        res.status(200).json({user,message:'login successful'});
+        bcyrpt.compare(password,user.password,(err,result)=>{
+            if(err){
+                throw new Error('Somthing went wrong');
+            }
+            if(result===true){
+                 return res.status(200).json({user,message:'login successful',status:200});
+            }
+            else{
+                 return res.status(400).json({message:'Password is incorrect',status:400});
+            }
+        })
     } catch (error) {
-        res.status(500).json({error: error.message});
+        res.status(500).json({error: error.message,status:500});
     }
 }
 
