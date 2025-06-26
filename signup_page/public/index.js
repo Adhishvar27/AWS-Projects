@@ -70,7 +70,8 @@ async function onLoginFuction(event) {
             document.body.appendChild(errorDiv);
         }
         else{
-            alert('User has been logged in successfully');
+            //alert('User has been logged in successfully');
+            window.location.href='expense_page/expense.html';
         }
         
     } catch (error) {
