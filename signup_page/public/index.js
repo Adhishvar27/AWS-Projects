@@ -63,7 +63,7 @@ async function onLoginFuction(event) {
         });
         const data=await response.json();
         console.log(data);
-        if(data.message==='Password is incorrect' || data.message==='User Not Found'){
+        if(data.status===400 || data.status===404){
             const errorDiv=document.createElement('div');
             errorDiv.textContent = data.message;
             errorDiv.style.color = 'red';
