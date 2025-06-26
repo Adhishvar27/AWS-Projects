@@ -1,10 +1,15 @@
 
+import { authFetch } from "./authFetch.js";
 const ulList=document.getElementById('ListByOrder');
 
 document.addEventListener('DOMContentLoaded',()=>{
     const expenseForm=document.getElementById('expenseForm');
     if(expenseForm){
         expenseForm.addEventListener('submit',addToTheExpenses);
+    }
+    const token=localStorage.getItem('token');
+    if(!token){
+        throw new Error('No token found, Please login');
     }
     loadContent();
 })
@@ -19,11 +24,8 @@ async function addToTheExpenses(event){
     };
 
     try {
-        const response=await fetch('http://localhost:3000/expense/addexpense',{
+        const response=await authFetch('http://localhost:3000/expense/addexpense',{
             method:'POST',
-            headers:{
-                'content-type':'application/json'
-            },
             body:JSON.stringify(myObj)
         });
         if(!response.ok){
@@ -38,7 +40,7 @@ async function addToTheExpenses(event){
 
 async function loadContent() {
     try {
-        const response=await fetch('http://localhost:3000/expense/getexpense');
+        const response=await authFetch('http://localhost:3000/expense/getexpense');
         const data=await response.json();
         if(!response.ok){
             throw new Error('somthing went wrong');
@@ -60,8 +62,9 @@ async function loadContent() {
 
 async function deletefunction(id,event){
     try {
-        const response=await fetch(`http://localhost:3000/expense/deleteexpense/${id}`,{
-        method:'DELETE'
+        const response=await authFetch(`http://localhost:3000/expense/deleteexpense`,{
+        method:'DELETE',
+        body:JSON.stringify({id})
     });
     if(!response.ok){
         throw new Error('Something went wrong');
