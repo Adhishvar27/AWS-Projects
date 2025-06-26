@@ -1,6 +1,8 @@
 const UserTable=require('../modules/userTable');
 const DataBase=require('../database/database');
 const bcyrpt=require('bcrypt');
+const jwt=require('jsonwebtoken');
+const serectKey=process.env.JWT_Code;
 
 const addtousers=async(req,res)=>{
     try {
@@ -20,6 +22,10 @@ const addtousers=async(req,res)=>{
     }
 }
 
+function generateAccessToken(id,name){
+    return jwt.sign({userId:id, Username:name},serectKey);
+}
+
 const checklogin=async(req,res)=>{
     try {
         const{email,password}=req.body;
@@ -32,7 +38,7 @@ const checklogin=async(req,res)=>{
                 throw new Error('Somthing went wrong');
             }
             if(result===true){
-                 return res.status(200).json({user,message:'login successful',status:200});
+                 return res.status(200).json({user,message:'login successful',status:200,token:generateAccessToken(user.id,user.name)});
             }
             else{
                  return res.status(400).json({message:'Password is incorrect',status:400});

@@ -6,7 +6,8 @@ const addtoexpense=async(req,res)=>{
         const insertintoexpense=await ExpenseTable.create({
             amount,
             category,
-            description
+            description,
+            userId:req.user.id
         });
         res.status(200).json({insertintoexpense,message:'Expense added to the table'});
     } catch (error) {
@@ -16,7 +17,11 @@ const addtoexpense=async(req,res)=>{
 
 const retriveexpense=async (req,res)=>{
     try {
-        const listOfExpenses=await ExpenseTable.findAll();
+        const listOfExpenses=await ExpenseTable.findAll({
+            where:{
+                userId:req.user.id
+            }
+        });
         res.status(200).json(listOfExpenses);
     } catch (error) {
         res.status(500).json({error: error.message});
@@ -25,10 +30,13 @@ const retriveexpense=async (req,res)=>{
 
 const deleteexpense=async(req,res)=>{
     try {
-        const id=parseInt(req.params.id);
+        const id=req.body.id;
         const deleteValue=await ExpenseTable.destroy({
-            where:{id}
-        })
+            where:{
+                id:id,
+                userId:req.user.id
+            }
+        });
         res.status(200).json({deleteValue,message:'Expense deleted from the Table'});
     } catch (error) {
         res.status(500).json({error: error.message});
