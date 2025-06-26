@@ -12,6 +12,9 @@ app.use(express.static(path.join(__dirname,'..','public')));
 const userrouter=require('./routers/userRouter');
 app.use('/users',userrouter);
 
+const expenseRounter=require('./routers/expenseRouter');
+app.use('/expense',expenseRounter);
+
 app.use('/',(req,res)=>{
     res.sendFile(path.join(__dirname,'..','public','MainPage.html'));
 })
