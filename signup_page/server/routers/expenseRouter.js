@@ -1,9 +1,11 @@
 const express=require('express');
 const router=express.Router();
 
+const userauth=require('../middleware/userauth');
 const expensecontroller=require('../controllers/expensecontroller');
-router.post('/addexpense',expensecontroller.addtoexpense);
-router.get('/getexpense',expensecontroller.retriveexpense);
-router.delete('/deleteexpense/:id',expensecontroller.deleteexpense);
+
+router.post('/addexpense',userauth.authenticateUser,expensecontroller.addtoexpense);
+router.get('/getexpense',userauth.authenticateUser,expensecontroller.retriveexpense);
+router.delete('/deleteexpense',userauth.authenticateUser,expensecontroller.deleteexpense);
 
 module.exports=router
