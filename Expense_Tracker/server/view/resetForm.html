@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>reset password</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form id="resetForm" class="bg-light p-4 border rounded" >
+                    <div class="form-floating mb-3">
+                        <input type="email" , id="email" name="email" class="form-control" placeholder="Enter the email"
+                            required>
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" name="password" id="password" class="form-control"
+                            placeholder="Enter the new password">
+                        <label for="password">New Password</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" name="password1" id="password1" class="form-control"
+                            placeholder=" enter the password again" required>
+                        <label for="password1">Confirm Password</label>
+                    </div>
+                    <div class="d-grid">
+                        <input type="submit" value="Reset password" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const form = document.getElementById('resetForm');
+        const newPass = document.getElementById('password');
+        const confirmpass = document.getElementById('password1');
+
+        form.addEventListener('submit', async (event) => {
+               event.preventDefault();
+            if (newPass.value !== confirmpass.value) {
+                alert('Password is missmatch');
+                return
+            }
+            const email = document.getElementById('email').value;
+            const password = newPass.value;
+            try {
+                const response = await fetch('http://localhost:3000/password/passwordchange', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: email, password: password })
+                });
+                const result=await response.json();
+                if (response.ok) {
+                    alert('Password reset successful');
+                    window.location.href='/login_page.html';
+                } else {
+                    alert(`Error: ${result.error}`);
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Something went wrong");
+            }
+        })
+    })
+
+</script>
+
+</html>

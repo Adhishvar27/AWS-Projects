@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "bcrypt": "^6.0.0",
+    "cashfree-pg": "^5.0.8",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.14.1",
+    "sequelize": "^6.37.7",
+    "sib-api-v3-sdk": "^8.5.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "sequelize-cli": "^6.6.3"
+  },
+  "scripts": {
+    "start": "node SignUp_page/server/app.js",
+    "dev": "nodemon SignUp_page/server/app.js"
+  }
+}
