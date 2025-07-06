@@ -1,4 +1,5 @@
 
+import { BASE_URL } from '../config.js'
 document.addEventListener('DOMContentLoaded', () => {
   const signUpForm = document.getElementById('signUpForm');
   if (signUpForm) {
@@ -6,8 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const loginForm = document.getElementById('loginForm');
+  const forgetpassword=document.getElementById('forgotPasswordForm');
   if (loginForm) {
     loginForm.addEventListener('submit', onLoginFuction);
+    forgetpassword.addEventListener('submit',forgetpasswordfunction)
   }
 });
 //document.getElementById('signUpForm').addEventListener('submit',onSignUpSubmitFunction);
@@ -21,7 +24,7 @@ async function onSignUpSubmitFunction(event){
         password:form.password.value
     };
     try {
-    const response= await fetch('http://localhost:3000/users/signup',{
+    const response= await fetch(`${BASE_URL}/users/signup`,{
         method:'POST',
         headers:{
             'content-type':'application/json'
@@ -31,11 +34,7 @@ async function onSignUpSubmitFunction(event){
     const data=await response.json();
     
     if(!response.ok){
-        console.log('error');
-        const errorText=document.createElement('div');
-        errorText.textContent=data.message;
-        errorText.style.color='red'
-        document.body.appendChild(errorText);
+        alert(data.message);
     }
     } catch (error) {
         console.error(error);
@@ -53,7 +52,7 @@ async function onLoginFuction(event) {
         password:form.password.value
     };
     try {
-        const response=await fetch('http://localhost:3000/users/login',{
+        const response=await fetch(`${BASE_URL}/users/login`,{
             method:'POST',
             headers:{
                 'content-type':'application/json'
@@ -63,10 +62,7 @@ async function onLoginFuction(event) {
         const data=await response.json();
         console.log(data);
         if(data.status===400 || data.status===404){
-            const errorDiv=document.createElement('div');
-            errorDiv.textContent = data.message;
-            errorDiv.style.color = 'red';
-            document.body.appendChild(errorDiv);
+            alert(data.message);
         }
         else{
             //alert('User has been logged in successfully');
@@ -81,7 +77,7 @@ async function onLoginFuction(event) {
     form.reset();
 }
 
-document.getElementById('forgotPasswordForm').addEventListener('submit', async function (e) {
+async function forgetpasswordfunction(e) {
     try {
         e.preventDefault();
   const email = document.getElementById('resetEmail').value;
@@ -89,7 +85,7 @@ document.getElementById('forgotPasswordForm').addEventListener('submit', async f
     email:email
   };
 
-  const response= await fetch('http://localhost:3000/password/forgetpassword',{
+  const response= await fetch(`${BASE_URL}/password/forgetpassword`,{
     method:'POST',
     headers:{
     'content-type':'application/json'
@@ -114,4 +110,4 @@ document.getElementById('forgotPasswordForm').addEventListener('submit', async f
         console.log(error);
     }
   
-});
+}

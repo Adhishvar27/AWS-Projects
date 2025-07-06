@@ -1,5 +1,6 @@
 const {Cashfree,CFEnvironment}=require("cashfree-pg");
-require('dotenv').config()
+const path=require('path');
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') })
 
 const cashfree=new Cashfree(CFEnvironment.SANDBOX,process.env.CASHFREE_APP_ID,process.env.CASHFREE_SECRET_KEY);
 
@@ -17,7 +18,7 @@ const createOrder=async (orderid,orderamount,ordercurrency,customerid,customerph
             },
             "order_meta":{
                 //"return_Url":return_Url
-                "return_Url":`http://localhost:3000/payment/status?order_id=${orderid}`
+                "return_Url":`${process.env.BASE_URL}/payment/status?order_id=${orderid}`
             },
             "order_expiry_time":formattedexpiredate
         };

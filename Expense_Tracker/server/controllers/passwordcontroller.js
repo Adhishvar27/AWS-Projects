@@ -1,6 +1,6 @@
 const Sib = require('sib-api-v3-sdk');
 const path=require('path');
-require('dotenv').config()
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') })
 const UserTable = require('../modules/userTable');
 const forgetpasswordTable = require('../modules/forgetPasswordTable');
 const sequelize = require('../database/database');
@@ -48,7 +48,7 @@ const forgetpassword = async (req, res) => {
                 sender,
                 to: receviers,
                 subject: `Testing prupose`,
-                textContent: `http://localhost:3000/password/resetpassword/${id}`
+                textContent: `${process.env.BASE_URL}/password/resetpassword/${id}`
             })
             return result;
         } catch (error) {

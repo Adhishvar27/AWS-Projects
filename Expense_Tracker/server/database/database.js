@@ -1,5 +1,6 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config();
+const path=require('path');
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const sequelize = new Sequelize(process.env.DATA_BASE, process.env.USER_NAME, process.env.PASSWORD, {
     dialect: process.env.DIALECT || 'mysql',

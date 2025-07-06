@@ -1,4 +1,5 @@
 
+import { BASE_URL } from '../../config.js'
 import { authFetch } from "./authFetch.js";
 const ulList = document.getElementById('ListByOrder');
 const ulleaderboardList = document.getElementById('leaderlist');
@@ -33,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         throw new Error('No token found, Please login');
     }
 
-    const premium = await authFetch('http://localhost:3000/payment/premium')
+    const premium = await authFetch(`${BASE_URL}/payment/premium`)
     const data = await premium.json();
     if (data.premium) {
         isPremiumDiv.innerHTML = ` <div class="alert alert-success text-center" role="alert">
@@ -62,7 +63,7 @@ async function addToTheExpenses(event) {
     };
 
     try {
-        const response = await authFetch('http://localhost:3000/expense/addexpense', {
+        const response = await authFetch(`${BASE_URL}/expense/addexpense`, {
             method: 'POST',
             body: JSON.stringify(myObj)
         });
@@ -78,7 +79,7 @@ async function addToTheExpenses(event) {
 
 async function showLeaderBoardfunction() {
     try {
-        const response = await authFetch('http://localhost:3000/premium/getleaderboard')
+        const response = await authFetch(`${BASE_URL}/premium/getleaderboard`)
         const data = await response.json();
         const title = document.getElementById('LeaderBoardTitle');
         title.className = 'text-center mb-3 mt-3 row justify-content-center fw-bold'
@@ -106,7 +107,7 @@ async function showLeaderBoardfunction() {
 async function loadContent(page = 1) {
     try {
 
-        const response = await authFetch(`http://localhost:3000/expense/getexpense?page=${page}&limit=${defaultvaule}`);
+        const response = await authFetch(`${BASE_URL}/expense/getexpense?page=${page}&limit=${defaultvaule}`);
         const data = await response.json();
         if (!response.ok) {
             throw new Error('somthing went wrong');
@@ -161,7 +162,7 @@ function showpagenation(totalpages, activepage) {
 
 async function deletefunction(id, event) {
     try {
-        const response = await authFetch(`http://localhost:3000/expense/deleteexpense`, {
+        const response = await authFetch(`${BASE_URL}/expense/deleteexpense`, {
             method: 'DELETE',
             body: JSON.stringify({ id })
         });
@@ -172,7 +173,7 @@ async function deletefunction(id, event) {
         if (deleteli) {
             deleteli.remove();
         }
-        const checkResponse = await authFetch(`http://localhost:3000/expense/getexpense?page=${currentPage}`);
+        const checkResponse = await authFetch(`${BASE_URL}/expense/getexpense?page=${currentPage}`);
         const checkData = await checkResponse.json();
         if (checkData.expense.length === 0 && currentPage > 1) {
             currentPage--;
@@ -185,7 +186,7 @@ async function deletefunction(id, event) {
 
 async function download() {
     try {
-        const response = await authFetch(`http://localhost:3000/expense/downloadreport`);
+        const response = await authFetch(`${BASE_URL}/expense/downloadreport`);
         const data = await response.json();
         if (response.status === 200) {
             const a = document.createElement('a');
@@ -214,7 +215,7 @@ function extractDateFromFilename(filename) {
 
 async function showdowloadtable() {
     try {
-        const response = await authFetch('http://localhost:3000/expense/showreportlist');
+        const response = await authFetch(`${BASE_URL}/expense/showreportlist`);
         const data = await response.json();
          if (!data.result || data.result.length === 0) {
             reportTableContainer.style.display = 'none';

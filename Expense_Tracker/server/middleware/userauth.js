@@ -1,5 +1,7 @@
 const UserTable = require('../modules/userTable');
 const jwt = require('jsonwebtoken');
+const path=require('path');
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') })
 const serectKey = process.env.JWT_Code;
 
 async function authenticateUser(req, res, next) {
